@@ -17,7 +17,6 @@ namespace Pendu_Vincent_Malitine
 public partial class MainWindow : Window
     {
         string mot = " "; // Le mot à deviner
-        string[] listmots = { "tuile", "bananaleclerc", "prototype", "nurburgring", "nordschleiffe" }; // Liste de mots possibles
         int vie = 6; // Nombre d'essais restants
         string lettresDevinees = ""; // Lettres déjà devinées
         bool jeuTermine = false; // Indique si le jeu est terminé
@@ -71,9 +70,13 @@ public partial class MainWindow : Window
             Close();
         }
 
-        private void ReloadWordButton_Click(object sender, RoutedEventArgs e)
+        private void RestartButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            vie=6;
+            lettresDevinees="";
+            jeuTermine=false;
+            LifeTextBox.Text = "Vies restantes : " + vie;
+
         }
     }
 }
