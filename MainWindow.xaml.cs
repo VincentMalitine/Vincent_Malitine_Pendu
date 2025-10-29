@@ -30,12 +30,6 @@ public partial class MainWindow : Window
         public MainWindow()
         {
             InitializeComponent();
-            while (jeuTermine == false)
-            {
-                Random rand = new Random();
-                int index = rand.Next(listmots.Length);
-                mot = listmots[index];
-            }
         }
 
         private void Button_Letter_Click(object sender, RoutedEventArgs e)
@@ -54,7 +48,7 @@ public partial class MainWindow : Window
             if (mot.Contains(tentative))
             {
                 lettresDevinees += tentative;
-                if (IsWordGuessed = true)
+                if (IsWordGuessed == true)
                 {
                     MessageBox.Show("Félicitations ! Vous avez deviné le mot : " + mot);
                     jeuTermine = true;
@@ -70,6 +64,16 @@ public partial class MainWindow : Window
                     jeuTermine = true;
                 }
             }
+        }
+
+        private void EndButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void ReloadWordButton_Click(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

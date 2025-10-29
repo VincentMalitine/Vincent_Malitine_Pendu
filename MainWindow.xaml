@@ -63,7 +63,8 @@
         <TextBox x:Name="ResultTextBox" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsReadOnly="True"/>
         <TextBox x:Name="LifeTextBox" Grid.Column="2" Grid.Row="1" VerticalAlignment="Top" HorizontalContentAlignment="Center" IsReadOnly="True"/>
 
-        <Button Style="{StaticResource VsStyle}" x:Name="EndButton" Content="Mettre Fin" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="2" Grid.Row="1" Margin="20" Width="100" Height="20" Click="EndButton_Click"/>
+        <Button x:Name="EndButton" Style="{StaticResource VsStyle}" Content="Mettre Fin" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="2" Grid.Row="1" Margin="20" Width="100" Height="20" Click="EndButton_Click"/>
+        <Button x:Name="ReloadWordButton" Style="{StaticResource VsStyle}" Content="Changer de mot" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="1" Margin="20" Width="150" Height="20" Click="ReloadWordButton_Click" />
 
         <Grid Grid.Row="1" Grid.Column="1">
 
