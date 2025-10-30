@@ -23,7 +23,7 @@ namespace Pendu_Vincent_Malitine
     public partial class MainWindow : Window
     {
         string mot = " "; // Le mot à deviner
-        int vie = 6; // Nombre d'essais restants
+        int vie = 10; // Nombre d'essais restants
         string processlettresDevinees = ""; // Lettres déjà devinées durant le traitement
         string lettresDevinees = ""; // Lettres déjà devinées
         string lettresUtilisees = ""; // Lettres déjà devinées
@@ -35,8 +35,15 @@ namespace Pendu_Vincent_Malitine
         public MainWindow()
         {
             InitializeComponent();
+            // Utiliser PreviewTextInput pour les caractères (meilleure compatibilité clavier)
+            this.PreviewTextInput += Window_PreviewTextInput;
+            // Utiliser PreviewKeyDown pour capter Enter avant qu'un contrôle le consomme
+            this.PreviewKeyDown += Window_PreviewKeyDown;
+            this.Focusable = true;
+            this.Focus(); // donne le focus à la fenêtre pour recevoir les frappes
             MessageBox.Show("Bienvenue au jeu du Pendu ! Devinez le mot en proposant des lettres. Vous avez 10 vies. Bonne chance !");
             RestartButton_Click(this, new RoutedEventArgs());
+            
         }
 
         private void Button_Letter_Click(object sender, RoutedEventArgs e)
@@ -147,12 +154,25 @@ namespace Pendu_Vincent_Malitine
             ResultTextBox.Text = "Proposition : ";
         }
 
-        private void Keyboard_KeyDown(object sender, KeyEventArgs e)
+        // Récupère le texte entré (respecte la disposition du clavier)
+        private void Window_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
-            if (e.Key >= Key.A && e.Key <= Key.Z)
+            if (!string.IsNullOrEmpty(e.Text) && char.IsLetter(e.Text[0]))
             {
-                TextBox_Result = e.Key.ToString()[0];
-                ResultTextBox.Text = "Proposition : " + TextBox_Result.ToString();
+                char c = char.ToUpperInvariant(e.Text[0]);
+                TextBox_Result = c;
+                ResultTextBox.Text = "Proposition : " + c;
+                e.Handled = true; // empêche une éventuelle propagation
+            }
+        }
+
+        // Intercepte Enter (ou autres touches non textuelles)
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter || e.Key == Key.Return)
+            {
+                Button_Done_Click(this, new RoutedEventArgs());
+                e.Handled = true;
             }
         }
     }
