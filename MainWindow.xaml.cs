@@ -64,7 +64,16 @@ namespace Pendu_Vincent_Malitine
                 // son d'erreur
                 SoundPlayer wrong = new SoundPlayer(@"Sons\Wrong.wav");
                 wrong.Play();
+                ResultTextBox.Text = "Proposition : ";
                 MessageBox.Show("Vous avez déjà utilisé la lettre : " + tentative);
+            }
+            else if (tentative == ' ')
+            {
+                // son d'erreur
+                SoundPlayer wrong = new SoundPlayer(@"Sons\Wrong.wav");
+                wrong.Play();
+                ResultTextBox.Text = "Proposition : ";
+                MessageBox.Show("Tentative ne peut être vide.");
             }
             else
             {
@@ -92,6 +101,9 @@ namespace Pendu_Vincent_Malitine
                             lettresDevinees += "#";
                         }
                     }
+                    ResultTextBox.Text = "Proposition : ";
+                    UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
+                    FoundedTextBox.Text = "Lettre(s) juste : " + lettresDevinees;
                     if (lettresDevinees == mot)
                     {
                         // son de victoire
@@ -107,6 +119,9 @@ namespace Pendu_Vincent_Malitine
                     LifeTextBox.Text = "Vies restantes : " + vie;
                     LifeProgressBar.Value = vie * 10;
                     LifeImage.Source = new ImageSourceConverter().ConvertFromString($@"Images\{vie}.png") as ImageSource;
+                    ResultTextBox.Text = "Proposition : ";
+                    UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
+                    FoundedTextBox.Text = "Lettre(s) juste : " + lettresDevinees;
                     if (vie <= 0)
                     {
                         // son de défaite
@@ -121,9 +136,9 @@ namespace Pendu_Vincent_Malitine
                     SoundPlayer wrong = new SoundPlayer(@"Sons\Wrong.wav");
                     wrong.Play();
                 }
+                ResultTextBox.Text = "Proposition : ";
                 UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
                 FoundedTextBox.Text = "Lettre(s) juste : " + lettresDevinees;
-                ResultTextBox.Text = "Proposition : ";
             }
 
         }
@@ -138,7 +153,6 @@ namespace Pendu_Vincent_Malitine
             var words = File.ReadAllLines(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WordsMAJONLY.txt"), Encoding.UTF8).Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
             mot = words.Length == 0 ? "prototype" : words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
             lettresDevinees = "";
-            lettresUtilisees = "";
             for (int i = 0; i < mot.Length; i++)
             {
                 lettresDevinees += "#";
@@ -147,11 +161,11 @@ namespace Pendu_Vincent_Malitine
             LifeProgressBar.Value = 100;
             LifeImage.Source = new ImageSourceConverter().ConvertFromString($@"Images\{vie}.png") as ImageSource;
             LifeTextBox.Text = "Vies restantes : " + vie;
-            lettresUtilisees = "";
             processlettresDevinees = "";
             UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
             FoundedTextBox.Text = "Lettre(s) juste : " + lettresDevinees;
             ResultTextBox.Text = "Proposition : ";
+            lettresUtilisees = "";
         }
 
         // Récupère le texte entré (respecte la disposition du clavier)
