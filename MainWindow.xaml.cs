@@ -122,6 +122,10 @@ namespace Pendu_Vincent_Malitine
                     ResultTextBox.Text = "Proposition : ";
                     UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
                     FoundedTextBox.Text = "Lettre(s) juste : " + lettresDevinees;
+                    lettresUtilisees += tentative;
+                    // son d'erreur
+                    SoundPlayer wrong = new SoundPlayer(@"Sons\Wrong.wav");
+                    wrong.Play();
                     if (vie <= 0)
                     {
                         // son de défaite
@@ -130,11 +134,6 @@ namespace Pendu_Vincent_Malitine
                         MessageBox.Show("Game Over ! Le mot était : " + mot);
                         RestartButton_Click(this, new RoutedEventArgs());
                     }
-                    lettresUtilisees += tentative;
-
-                    // son d'erreur
-                    SoundPlayer wrong = new SoundPlayer(@"Sons\Wrong.wav");
-                    wrong.Play();
                 }
                 ResultTextBox.Text = "Proposition : ";
                 UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
