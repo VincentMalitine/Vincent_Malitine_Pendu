@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Media;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -33,7 +34,7 @@ namespace Pendu_Vincent_Malitine
         public MainWindow()
         {
             InitializeComponent();
-            MessageBox.Show("Bienvenue au jeu du Pendu ! Devinez le mot en proposant des lettres. Vous avez 6 vies. Bonne chance !");
+            MessageBox.Show("Bienvenue au jeu du Pendu ! Devinez le mot en proposant des lettres. Vous avez 10 vies. Bonne chance !");
             RestartButton_Click(this, new RoutedEventArgs());
         }
 
@@ -96,6 +97,7 @@ namespace Pendu_Vincent_Malitine
                     vie--;
                     LifeTextBox.Text = "Vies restantes : " + vie;
                     LifeProgressBar.Value = vie * 10;
+                    LifeImage.Source = new ImageSourceConverter().ConvertFromString($@".\Images\{vie}.png") as ImageSource;
                     if (vie <= 0)
                     {
                         // son de défaite
@@ -124,6 +126,7 @@ namespace Pendu_Vincent_Malitine
         {
             vie = 10;
             LifeProgressBar.Value = 100;
+            LifeImage.Source = new ImageSourceConverter().ConvertFromString($@".\Images\{vie}.png") as ImageSource;
             lettresDevinees = "";
             LifeTextBox.Text = "Vies restantes : " + vie;
             lettresUtilisees = "";
@@ -131,62 +134,8 @@ namespace Pendu_Vincent_Malitine
             UsedTextBox.Text = lettresUtilisees;
             FoundedTextBox.Text = lettresDevinees;
             ResultTextBox.Text = "";
-
-            // Recherche Words.txt en remontant depuis le dossier de l'exécutable
-            // (permet de trouver le fichier placé à la racine du projet source)
-            try
-            {
-                string? wordsPath = FindFileInParentDirectories("Words.txt");
-                if (string.IsNullOrEmpty(wordsPath))
-                {
-                    MessageBox.Show("Fichier Words.txt introuvable (recherche depuis le dossier de l'exécutable).");
-                    mot = string.Empty;
-                    return;
-                }
-
-                var lines = File.ReadAllLines(wordsPath)
-                                .Select(l => l.Trim())
-                                .Where(l => !string.IsNullOrWhiteSpace(l) && !l.StartsWith("#"))
-                                .ToArray();
-
-                if (lines.Length == 0)
-                {
-                    MessageBox.Show("Aucun mot valide trouvé dans Words.txt.");
-                    mot = string.Empty;
-                    return;
-                }
-
-                mot = lines[new System.Random().Next(lines.Length)].ToUpperInvariant();
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show("Erreur lors du chargement du mot : " + ex.Message);
-                mot = string.Empty;
-            }
-        }
-
-        // Remonte les répertoires à partir du dossier de l'exécutable (puis CurrentDirectory)
-        // et retourne le chemin complet du fichier s'il est trouvé.
-        private string? FindFileInParentDirectories(string fileName)
-        {
-            DirectoryInfo? dir = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory);
-            while (dir != null)
-            {
-                string candidate = System.IO.Path.Combine(dir.FullName, fileName);
-                if (File.Exists(candidate)) return candidate;
-                dir = dir.Parent;
-            }
-
-            // fallback : essayer depuis le répertoire courant
-            dir = new DirectoryInfo(Directory.GetCurrentDirectory());
-            while (dir != null)
-            {
-                string candidate = System.IO.Path.Combine(dir.FullName, fileName);
-                if (File.Exists(candidate)) return candidate;
-                dir = dir.Parent;
-            }
-
-            return null;
+            var words = File.ReadAllLines(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WordsMAJONLY.txt"), Encoding.UTF8).Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
+            mot = words.Length == 0 ? "prototype" : words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
         }
     }
 }
