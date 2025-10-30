@@ -4,6 +4,9 @@
              xmlns:local="clr-namespace:Pendu_Vincent_Malitine"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+
+        <
+
     </Application.Resources>
+
 </Application>
