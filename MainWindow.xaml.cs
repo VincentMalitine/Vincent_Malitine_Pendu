@@ -54,7 +54,7 @@ namespace Pendu_Vincent_Malitine
             if (lettresUtilisees.Contains(tentative))
             {
                 // son d'erreur
-                SoundPlayer wrong = new SoundPlayer(@".\Sons\Wrong.wav");
+                SoundPlayer wrong = new SoundPlayer(@"Sons\Wrong.wav");
                 wrong.Play();
                 MessageBox.Show("Vous avez déjà utilisé la lettre : " + tentative);
             }
@@ -66,7 +66,7 @@ namespace Pendu_Vincent_Malitine
                     processlettresDevinees = lettresDevinees;
                     lettresDevinees = "";
                     // son de réussite
-                    SoundPlayer correct = new SoundPlayer(@".\Sons\Correct.wav");
+                    SoundPlayer correct = new SoundPlayer(@"Sons\Correct.wav");
                     correct.Play();
 
                     for (int i = 0; i < mot.Length; i++)
@@ -87,7 +87,7 @@ namespace Pendu_Vincent_Malitine
                     if (lettresDevinees == mot)
                     {
                         // son de victoire
-                        SoundPlayer victory = new SoundPlayer(@".\Sons\Victory.wav");
+                        SoundPlayer victory = new SoundPlayer(@"Sons\Victory.wav");
                         victory.Play();
                         MessageBox.Show("Félicitations ! Vous avez deviné le mot : " + mot);
                     }
@@ -97,18 +97,18 @@ namespace Pendu_Vincent_Malitine
                     vie--;
                     LifeTextBox.Text = "Vies restantes : " + vie;
                     LifeProgressBar.Value = vie * 10;
-                    LifeImage.Source = new ImageSourceConverter().ConvertFromString($@".\Images\{vie}.png") as ImageSource;
+                    LifeImage.Source = new ImageSourceConverter().ConvertFromString($@"Images\{vie}.png") as ImageSource;
                     if (vie <= 0)
                     {
                         // son de défaite
-                        SoundPlayer gameover = new SoundPlayer(@".\Sons\GameOver.wav");
+                        SoundPlayer gameover = new SoundPlayer(@"Sons\GameOver.wav");
                         gameover.Play();
                         MessageBox.Show("Game Over ! Le mot était : " + mot);
                     }
                     lettresUtilisees += tentative;
 
                     // son d'erreur
-                    SoundPlayer wrong = new SoundPlayer(@".\Sons\Wrong.wav");
+                    SoundPlayer wrong = new SoundPlayer(@"Sons\Wrong.wav");
                     wrong.Play();
                 }
                 UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
@@ -126,7 +126,7 @@ namespace Pendu_Vincent_Malitine
         {
             vie = 10;
             LifeProgressBar.Value = 100;
-            LifeImage.Source = new ImageSourceConverter().ConvertFromString($@".\Images\{vie}.png") as ImageSource;
+            LifeImage.Source = new ImageSourceConverter().ConvertFromString($@"Images\{vie}.png") as ImageSource;
             lettresDevinees = "";
             LifeTextBox.Text = "Vies restantes : " + vie;
             lettresUtilisees = "";
