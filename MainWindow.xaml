@@ -84,7 +84,7 @@
         <TextBox x:Name="UsedTextBox" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsReadOnly="True" Style="{StaticResource VsStyle4TextBox}"/>
         <TextBox x:Name="FoundedTextBox" Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" HorizontalContentAlignment="Center" IsReadOnly="True" Style="{StaticResource VsStyle4TextBox}" Margin="2,81,2,0"/>
         <TextBox x:Name="ResultTextBox" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True" Style="{StaticResource VsStyle4TextBox}"/>
-        <TextBox x:Name="LifeTextBox" Grid.Column="2" VerticalAlignment="Top" HorizontalContentAlignment="Center" IsReadOnly="True" Style="{StaticResource VsStyle4TextBox}" Margin="2,92,2,0"/>
+        <TextBox x:Name="LifeTextBox" Grid.Column="2" Grid.Row="0" HorizontalContentAlignment="Center" IsReadOnly="True" Width="260" Style="{StaticResource VsStyle4TextBox}" Margin="4,92,3,25"/>
         <ProgressBar x:Name="LifeProgressBar" Grid.Column="2" Grid.Row="0" VerticalAlignment="Bottom" Height="20" Width="267"/>
         <Image x:Name="LifeImage" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="230" Height="230"/>
 

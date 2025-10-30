@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+
 namespace Pendu_Vincent_Malitine
 {
     /// <summary>
@@ -81,7 +82,7 @@ namespace Pendu_Vincent_Malitine
                         }
                         else
                         {
-                            lettresDevinees += "_";
+                            lettresDevinees += "#";
                         }
                     }
                     if (lettresDevinees == mot)
@@ -90,6 +91,7 @@ namespace Pendu_Vincent_Malitine
                         SoundPlayer victory = new SoundPlayer(@"Sons\Victory.wav");
                         victory.Play();
                         MessageBox.Show("Félicitations ! Vous avez deviné le mot : " + mot);
+                        RestartButton_Click(this, new RoutedEventArgs());
                     }
                 }
                 else
@@ -104,6 +106,7 @@ namespace Pendu_Vincent_Malitine
                         SoundPlayer gameover = new SoundPlayer(@"Sons\GameOver.wav");
                         gameover.Play();
                         MessageBox.Show("Game Over ! Le mot était : " + mot);
+                        RestartButton_Click(this, new RoutedEventArgs());
                     }
                     lettresUtilisees += tentative;
 
@@ -113,6 +116,7 @@ namespace Pendu_Vincent_Malitine
                 }
                 UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
                 FoundedTextBox.Text = "Lettre(s) juste : " + lettresDevinees;
+                ResultTextBox.Text = "Proposition : ";
             }
 
         }
@@ -124,18 +128,32 @@ namespace Pendu_Vincent_Malitine
 
         private void RestartButton_Click(object sender, RoutedEventArgs e)
         {
+            var words = File.ReadAllLines(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WordsMAJONLY.txt"), Encoding.UTF8).Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
+            mot = words.Length == 0 ? "prototype" : words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
+            lettresDevinees = "";
+            lettresUtilisees = "";
+            for (int i = 0; i < mot.Length; i++)
+            {
+                lettresDevinees += "#";
+            }
             vie = 10;
             LifeProgressBar.Value = 100;
             LifeImage.Source = new ImageSourceConverter().ConvertFromString($@"Images\{vie}.png") as ImageSource;
-            lettresDevinees = "";
             LifeTextBox.Text = "Vies restantes : " + vie;
             lettresUtilisees = "";
             processlettresDevinees = "";
-            UsedTextBox.Text = lettresUtilisees;
-            FoundedTextBox.Text = lettresDevinees;
-            ResultTextBox.Text = "";
-            var words = File.ReadAllLines(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WordsMAJONLY.txt"), Encoding.UTF8).Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
-            mot = words.Length == 0 ? "prototype" : words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
+            UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
+            FoundedTextBox.Text = "Lettre(s) juste : " + lettresDevinees;
+            ResultTextBox.Text = "Proposition : ";
+        }
+
+        private void Keyboard_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key >= Key.A && e.Key <= Key.Z)
+            {
+                TextBox_Result = e.Key.ToString()[0];
+                ResultTextBox.Text = "Proposition : " + TextBox_Result.ToString();
+            }
         }
     }
 }
