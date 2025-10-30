@@ -8,7 +8,10 @@
         Title="MainWindow" Height="450" Width="800">
 
     <Window.Resources>
-        <Style x:Key="VsStyle" TargetType="Button">
+        <Style TargetType="local:MainWindow">
+            <Setter Property="Background" Value="Black"/>
+        </Style>
+        <Style x:Key="VsStyle4Button" TargetType="Button">
             <Setter Property="Margin" Value="2"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="2"/>
@@ -44,7 +47,25 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="VsStyle4TextBox" TargetType="TextBox">
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="2"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Background" Value="#FF2D2D30"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="#151515"/>
+            <Setter Property="BorderThickness" Value="0.75"/>
+        </Style>
     </Window.Resources>
+
 
     <!-- Définition de la Grid -->
     <Grid>
@@ -60,11 +81,15 @@
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
 
-        <TextBox x:Name="ResultTextBox" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsReadOnly="True"/>
-        <TextBox x:Name="LifeTextBox" Grid.Column="2" Grid.Row="1" VerticalAlignment="Top" HorizontalContentAlignment="Center" IsReadOnly="True"/>
+        <TextBox x:Name="UsedTextBox" Grid.Column="0" Grid.Row="0" VerticalAlignment="Bottom" HorizontalContentAlignment="Center" IsReadOnly="True" Style="{StaticResource VsStyle4TextBox}"/>
+        <TextBox x:Name="FoundedTextBox" Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" HorizontalContentAlignment="Center" IsReadOnly="True" Style="{StaticResource VsStyle4TextBox}" Margin="2,81,2,0"/>
+        <TextBox x:Name="ResultTextBox" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalContentAlignment="Center" IsReadOnly="True" Style="{StaticResource VsStyle4TextBox}"/>
+        <TextBox x:Name="LifeTextBox" Grid.Column="2" VerticalAlignment="Top" HorizontalContentAlignment="Center" IsReadOnly="True" Style="{StaticResource VsStyle4TextBox}" Margin="2,92,2,0"/>
+        <ProgressBar x:Name="LifeProgressBar" Grid.Column="1" Grid.Row="0" VerticalAlignment="Top" Height="20" Grid.ColumnSpan="2" Margin="266,123,0,0"/>
+        <Image x:Name="LifeImage" Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="230" Height="230"/>
 
-        <Button x:Name="EndButton" Style="{StaticResource VsStyle}" Content="Mettre Fin" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="2" Grid.Row="1" Margin="20" Width="100" Height="20" Click="EndButton_Click"/>
-        <Button x:Name="RestartButton" Style="{StaticResource VsStyle}" Content="Recommencer" HorizontalAlignment="Center" VerticalAlignment="Bottom" Grid.Column="0" Grid.Row="1" Margin="20" Width="150" Height="20" Click="RestartButton_Click"/>
+        <Button x:Name="EndButton" Style="{StaticResource VsStyle4Button}" Content="Mettre Fin" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="0,144,0,0" Width="100" Height="20" Click="EndButton_Click"/>
+        <Button x:Name="RestartButton" Style="{StaticResource VsStyle4Button}" Content="Recommencer" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="2" Grid.Row="1" Margin="0,119,0,0" Width="150" Height="20" Click="RestartButton_Click"/>
 
         <Grid Grid.Row="1" Grid.Column="1">
 
@@ -84,33 +109,33 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Row="0" Grid.Column="0" Content="A" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="0" Grid.Column="1" Content="B" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="0" Grid.Column="2" Content="C" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="0" Grid.Column="3" Content="D" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="0" Grid.Column="4" Content="E" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="1" Grid.Column="0" Content="F" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="1" Grid.Column="1" Content="G" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="1" Grid.Column="2" Content="H" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="1" Grid.Column="3" Content="I" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="1" Grid.Column="4" Content="J" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="2" Grid.Column="0" Content="K" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="2" Grid.Column="1" Content="L" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="2" Grid.Column="2" Content="M" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="2" Grid.Column="3" Content="N" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="2" Grid.Column="4" Content="O" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="3" Grid.Column="0" Content="P" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="3" Grid.Column="1" Content="Q" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="3" Grid.Column="2" Content="R" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="3" Grid.Column="3" Content="S" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="3" Grid.Column="4" Content="T" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="4" Grid.Column="0" Content="U" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="4" Grid.Column="1" Content="V" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="4" Grid.Column="2" Content="W" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="4" Grid.Column="3" Content="X" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="4" Grid.Column="4" Content="Y" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="5" Grid.Column="0" Content="Z" Style="{StaticResource VsStyle}" Click="Button_Letter_Click"/>
-            <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" Content="✔️ Done ✔️" Style="{StaticResource VsStyle}" Click="Button_Done_Click"/>
+            <Button Grid.Row="0" Grid.Column="0" Content="A" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="0" Grid.Column="1" Content="B" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="0" Grid.Column="2" Content="C" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="0" Grid.Column="3" Content="D" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="0" Grid.Column="4" Content="E" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="1" Grid.Column="0" Content="F" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="1" Grid.Column="1" Content="G" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="1" Grid.Column="2" Content="H" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="1" Grid.Column="3" Content="I" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="1" Grid.Column="4" Content="J" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="2" Grid.Column="0" Content="K" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="2" Grid.Column="1" Content="L" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="2" Grid.Column="2" Content="M" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="2" Grid.Column="3" Content="N" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="2" Grid.Column="4" Content="O" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="3" Grid.Column="0" Content="P" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="3" Grid.Column="1" Content="Q" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="3" Grid.Column="2" Content="R" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="3" Grid.Column="3" Content="S" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="3" Grid.Column="4" Content="T" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="4" Grid.Column="0" Content="U" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="4" Grid.Column="1" Content="V" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="4" Grid.Column="2" Content="W" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="4" Grid.Column="3" Content="X" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="4" Grid.Column="4" Content="Y" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="5" Grid.Column="0" Content="Z" Style="{StaticResource VsStyle4Button}" Click="Button_Letter_Click"/>
+            <Button Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="4" Content="✔️ Done ✔️" Style="{StaticResource VsStyle4Button}" Click="Button_Done_Click"/>
 
         </Grid>
 
