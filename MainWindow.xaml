@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Pendu_Vincent_Malitine"
         mc:Ignorable="d"
         Title="Pendu — Vincent Malitine"
-        Height="600" Width="1000"
+        Height="600" Width="1080"
         MinWidth="800" MinHeight="480"
         Background="#1E1E1E"
         Foreground="White">

@@ -137,7 +137,7 @@ namespace Pendu_Vincent_Malitine
                     }
                     ResultTextBox.Text = "Proposition : ";
                     UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
-                    FoundedTextBox.Text = "Lettre(s) juste : " + lettresDevinees;
+                    FoundedTextBox.Text = lettresDevinees;
                     // vérifie si le mot est entièrement deviné
                     if (lettresDevinees == mot)
                     {
@@ -157,7 +157,7 @@ namespace Pendu_Vincent_Malitine
                     LifeImage.Source = new ImageSourceConverter().ConvertFromString($@"Images\{vie}.png") as ImageSource;
                     ResultTextBox.Text = "Proposition : ";
                     UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
-                    FoundedTextBox.Text = "Lettre(s) juste : " + lettresDevinees;
+                    FoundedTextBox.Text = lettresDevinees;
                     lettresUtilisees += tentative;
                     // son d'erreur
                     SoundPlayer wrong = new SoundPlayer(@"Sons\Wrong.wav");
@@ -175,7 +175,7 @@ namespace Pendu_Vincent_Malitine
                 // réinitialise la proposition et met à jour l'affichage "au cas où cela n'as ultérieurement pas été effectué"
                 ResultTextBox.Text = "Proposition : ";
                 UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
-                FoundedTextBox.Text = "Lettre(s) juste : " + lettresDevinees;
+                FoundedTextBox.Text = lettresDevinees;
             }
 
         }
@@ -204,7 +204,7 @@ namespace Pendu_Vincent_Malitine
             LifeTextBox.Text = "Vies restantes : " + vie;
             processlettresDevinees = "";
             UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
-            FoundedTextBox.Text = "Lettre(s) juste : " + lettresDevinees;
+            FoundedTextBox.Text = lettresDevinees;
             ResultTextBox.Text = "Proposition : ";
             lettresUtilisees = "";
         }
