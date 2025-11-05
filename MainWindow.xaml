@@ -164,13 +164,12 @@
             <TextBlock Text="Conseils" FontWeight="Bold" Foreground="#CCCCCC" Margin="6,12,6,4"/>
             <TextBlock Text="• Appuyez sur une lettre ou tapez au clavier." Foreground="#BDBDBD" Margin="6,0"/>
             <TextBlock Text="• Appuyez sur Entrée pour valider votre proposition." Foreground="#BDBDBD" Margin="6,2"/>
-            <TextBlock Text="• Backspace pour effacer la proposition en cours." Foreground="#BDBDBD" Margin="6,2"/>
         </StackPanel>
 
         <!-- Status bar -->
         <Border Grid.Row="2" Grid.ColumnSpan="3" Background="#151515" Padding="6" CornerRadius="6" Margin="0,10,0,0">
             <DockPanel>
-                <TextBlock Text="Prêt" Foreground="#9E9E9E" DockPanel.Dock="Left" VerticalAlignment="Center"/>
+                <TextBlock Text="Prêt " Foreground="#9E9E9E" DockPanel.Dock="Left" VerticalAlignment="Center"/>
                 <TextBlock Text="Fichier de mots : WordsMAJONLY.txt" Foreground="#9E9E9E" DockPanel.Dock="Right" VerticalAlignment="Center"/>
             </DockPanel>
         </Border>
