@@ -125,26 +125,35 @@
                 <WrapPanel x:Name="LettersPanel" Orientation="Horizontal" ItemHeight="48" ItemWidth="56">
                     <!-- Lettres A..Z -->
                     <Button Content="A" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer A"/>
+                    <Button Content="Â" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer Â"/>
+                    <Button Content="À" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer À"/>
                     <Button Content="B" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer B"/>
                     <Button Content="C" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer C"/>
                     <Button Content="D" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer D"/>
                     <Button Content="E" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer E"/>
+                    <Button Content="É" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer É"/>
+                    <Button Content="È" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer È"/>
+                    <Button Content="Ê" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer Ê"/>
                     <Button Content="F" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer F"/>
                     <Button Content="G" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer G"/>
                     <Button Content="H" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer H"/>
                     <Button Content="I" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer I"/>
+                    <Button Content="Î" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer Î"/>
                     <Button Content="J" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer J"/>
                     <Button Content="K" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer K"/>
                     <Button Content="L" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer L"/>
                     <Button Content="M" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer M"/>
                     <Button Content="N" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer N"/>
                     <Button Content="O" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer O"/>
+                    <Button Content="Ô" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer Ô"/>
                     <Button Content="P" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer P"/>
                     <Button Content="Q" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer Q"/>
                     <Button Content="R" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer R"/>
                     <Button Content="S" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer S"/>
                     <Button Content="T" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer T"/>
                     <Button Content="U" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer U"/>
+                    <Button Content="Ù" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer Ù"/>
+                    <Button Content="Û" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer Û"/>
                     <Button Content="V" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer V"/>
                     <Button Content="W" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer W"/>
                     <Button Content="X" Style="{StaticResource PrimaryButton}" Click="Button_Letter_Click" ToolTip="Proposer X"/>

@@ -22,6 +22,12 @@ namespace Pendu_Vincent_Malitine
     /// </summary>
     public partial class MainWindow : Window
     {
+        // Initialisation des sons
+        SoundPlayer correct = new SoundPlayer(@"Sons\Correct.wav");
+        SoundPlayer wrong = new SoundPlayer(@"Sons\Wrong.wav");
+        SoundPlayer victory = new SoundPlayer(@"Sons\Victory.wav");
+        SoundPlayer gameover = new SoundPlayer(@"Sons\GameOver.wav");
+
         // Variables de jeu
         string mot = " "; // Le mot à deviner
         int vie = 10; // Nombre d'essais restants
@@ -89,7 +95,6 @@ namespace Pendu_Vincent_Malitine
             if (lettresUtilisees.Contains(tentative))
             {
                 // son d'erreur
-                SoundPlayer wrong = new SoundPlayer(@"Sons\Wrong.wav");
                 wrong.Play();
                 ResultTextBox.Text = "Proposition : ";
                 MessageBox.Show("Vous avez déjà utilisé la lettre : " + tentative);
@@ -98,7 +103,6 @@ namespace Pendu_Vincent_Malitine
             else if (tentative == ' ')
             {
                 // son d'erreur
-                SoundPlayer wrong = new SoundPlayer(@"Sons\Wrong.wav");
                 wrong.Play();
                 ResultTextBox.Text = "Proposition : ";
                 MessageBox.Show("Proposition ne peut être vide.");
@@ -113,7 +117,6 @@ namespace Pendu_Vincent_Malitine
                     processlettresDevinees = lettresDevinees;
                     lettresDevinees = "";
                     // son de réussite
-                    SoundPlayer correct = new SoundPlayer(@"Sons\Correct.wav");
                     correct.Play();
 
                     // met à jour les lettres devinées
@@ -132,7 +135,13 @@ namespace Pendu_Vincent_Malitine
                         // conserve les # pour les lettres non encore devinées
                         else
                         {
-                            lettresDevinees += "#";
+                            lettresDevinees += '#';
+                        }
+                        // ajoute les tirets si le mot en contient
+                        if (mot[i] == '-')
+                        {
+                            lettresDevinees.Substring(i, 1);
+                            lettresDevinees = lettresDevinees.Remove(i, 1).Insert(i, "-");
                         }
                     }
                     ResultTextBox.Text = "Proposition : ";
@@ -142,7 +151,6 @@ namespace Pendu_Vincent_Malitine
                     if (lettresDevinees == mot)
                     {
                         // son de victoire
-                        SoundPlayer victory = new SoundPlayer(@"Sons\Victory.wav");
                         victory.Play();
                         MessageBox.Show("Félicitations ! Vous avez deviné le mot : " + mot);
                         RestartButton_Click(this, new RoutedEventArgs());
@@ -160,13 +168,11 @@ namespace Pendu_Vincent_Malitine
                     FoundedTextBox.Text = lettresDevinees;
                     lettresUtilisees += tentative;
                     // son d'erreur
-                    SoundPlayer wrong = new SoundPlayer(@"Sons\Wrong.wav");
                     wrong.Play();
                     // vérifie si le joueur a épuisé toutes ses vies
                     if (vie <= 0)
                     {
                         // son de défaite
-                        SoundPlayer gameover = new SoundPlayer(@"Sons\GameOver.wav");
                         gameover.Play();
                         MessageBox.Show("Game Over ! Le mot était : " + mot);
                         RestartButton_Click(this, new RoutedEventArgs());
@@ -197,6 +203,11 @@ namespace Pendu_Vincent_Malitine
             for (int i = 0; i < mot.Length; i++)
             {
                 lettresDevinees += "#";
+                if (mot[i] == '-')
+                {
+                    lettresDevinees.Substring(i, 1);
+                    lettresDevinees = lettresDevinees.Remove(i, 1).Insert(i, "-");
+                }
             }
             vie = 10;
             LifeProgressBar.Value = 100;
