@@ -4,6 +4,7 @@ using System.Media;
 using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -33,10 +34,10 @@ namespace Pendu_Vincent_Malitine
         int vie = 10; // Nombre d'essais restants
         string processlettresDevinees = ""; // Lettres déjà devinées durant le traitement
         string lettresDevinees = ""; // Lettres déjà devinées
+        string TimerlettresUtilisees = ""; // Lettres devinées pour le timer
         string lettresUtilisees = ""; // Lettres déjà devinées
         char TextBox_Result = ' '; // Caractère entré dans la TextBox
         char tentative = ' '; // Caractère proposé
-
 
 
         public MainWindow()
@@ -51,8 +52,9 @@ namespace Pendu_Vincent_Malitine
             MessageBox.Show("Bienvenue au jeu du Pendu ! Devinez le mot en proposant des lettres. Vous avez 10 vies. Bonne chance !");
             // Initialise une nouvelle partie au démarrage en utilisant le bouton de redémarrage afin d'éviter la duplication de code
             RestartButton_Click(this, new RoutedEventArgs());
-            
+
         }
+
 
         // Gère le clic sur les boutons de lettres pour capturer la lettre proposée
         private void Button_Letter_Click(object sender, RoutedEventArgs e)
@@ -182,6 +184,7 @@ namespace Pendu_Vincent_Malitine
                 ResultTextBox.Text = "Proposition : ";
                 UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
                 FoundedTextBox.Text = lettresDevinees;
+                
             }
 
         }

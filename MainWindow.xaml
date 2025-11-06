@@ -96,11 +96,12 @@
             <TextBlock Text="Utilisez le clavier ou cliquez sur les lettres. Entrée pour valider." Foreground="#BDBDBD" Margin="12,0,0,0" VerticalAlignment="Center" DockPanel.Dock="Left"/>
         </DockPanel>
 
-        <!-- LEFT: Vie, image, commandes -->
+        <!-- LEFT: Vie, Temps, image, commandes -->
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Top" Margin="6">
             <TextBlock Text="Vies" FontWeight="Bold" Foreground="#CCCCCC" Margin="4"/>
             <Image x:Name="LifeImage" Height="180" Width="180" Stretch="Uniform" Margin="6" HorizontalAlignment="Stretch"/>
-            <ProgressBar x:Name="LifeProgressBar" Height="18" Margin="6" Maximum="100" Value="100"/>
+            <ProgressBar x:Name="LifeProgressBar" Height="18" Margin="6" Maximum="100" Value="100" Background="Red"/>
+            <ProgressBar x:Name="TimeBar" Height="18" Margin="6" Maximum="30" Value="100" Background="Black"/>
             <TextBox x:Name="LifeTextBox" Style="{StaticResource StatusTextBox}" Margin="6,8,6,0" Text="Vies restantes : 10"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="6,12,6,0">
                 <Button x:Name="RestartButton" Style="{StaticResource PrimaryButton}" Content="Recommencer" Width="140" Height="40" Click="RestartButton_Click" />
