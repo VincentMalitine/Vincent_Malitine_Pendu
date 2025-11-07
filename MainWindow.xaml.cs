@@ -290,14 +290,14 @@ namespace Pendu_Vincent_Malitine
             mot = words.Length == 0 ? "prototype" : words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
             if (Difficulty == 1) // Hard
             {
-                while (mot.Length < 7)
+                while (mot.Length < 7 || mot.Length > 11)
                 {
                     mot = words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
                 }
             }
             if (Difficulty == 2) // Extreme
             {
-                while (mot.Length < 10)
+                while (mot.Length < 12)
                 {
                     mot = words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
                 }
