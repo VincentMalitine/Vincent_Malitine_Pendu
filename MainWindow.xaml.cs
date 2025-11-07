@@ -273,6 +273,18 @@ namespace Pendu_Vincent_Malitine
         // Gère le clic sur le bouton "Restart" pour initialiser une nouvelle partie
         private void RestartButton_Click(object sender, RoutedEventArgs e)
         {
+            if (Difficulty == 0)
+            {
+                DifficultyTextBox.Text = "Difficulté : Easy";
+            }
+            else if (Difficulty == 1)
+            {
+                DifficultyTextBox.Text = "Difficulté : Hard";
+            }
+            else
+            {
+                DifficultyTextBox.Text = "Difficulté : Extreme";
+            }
             var words = File.ReadAllLines(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WordsMAJONLY.txt"), Encoding.UTF8)
                             .Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
             mot = words.Length == 0 ? "prototype" : words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
