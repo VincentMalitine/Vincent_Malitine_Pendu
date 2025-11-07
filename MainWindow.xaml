@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:Pendu_Vincent_Malitine"
         mc:Ignorable="d"
         Title="Pendu — Vincent Malitine"
-        Height="600" Width="1080"
-        MinWidth="800" MinHeight="480"
+        Height="700" Width="1080"
+        MinWidth="1080" MinHeight="700"
         Background="#1E1E1E"
         Foreground="White">
 
@@ -38,6 +38,8 @@
                                 <Setter Property="Background" Value="#3E3E40"/>
                             </Trigger>
                             <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#7A0000"/>
+                                <Setter Property="Foreground" Value="White"/>
                                 <Setter Property="Opacity" Value="0.5"/>
                                 <Setter Property="Cursor" Value="Arrow"/>
                             </Trigger>
@@ -100,13 +102,16 @@
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" VerticalAlignment="Top" Margin="6">
             <TextBlock Text="Vies" FontWeight="Bold" Foreground="#CCCCCC" Margin="4"/>
             <Image x:Name="LifeImage" Height="180" Width="180" Stretch="Uniform" Margin="6" HorizontalAlignment="Stretch"/>
+            <TextBlock Text="Barre de vie" FontWeight="Bold" Foreground="#CCCCCC" Margin="4,12,4,4"/>
             <ProgressBar x:Name="LifeProgressBar" Height="18" Margin="6" Maximum="100" Value="100" Background="Red"/>
-            <ProgressBar x:Name="TimeBar" Height="18" Margin="6" Maximum="30" Value="100" Background="Black"/>
+            <TextBlock Text="Temps restant" FontWeight="Bold" Foreground="#CCCCCC" Margin="4,12,4,4"/>
+            <ProgressBar x:Name="TimeBar" Height="8" Margin="6" Maximum="30" Value="30" Background="Black" Foreground="DarkOrange"/>
             <TextBox x:Name="LifeTextBox" Style="{StaticResource StatusTextBox}" Margin="6,8,6,0" Text="Vies restantes : 10"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="6,12,6,0">
                 <Button x:Name="RestartButton" Style="{StaticResource PrimaryButton}" Content="Recommencer" Width="140" Height="40" Click="RestartButton_Click" />
                 <Button x:Name="EndButton" Style="{StaticResource PrimaryButton}" Content="Quitter" Width="80" Height="40" Click="EndButton_Click" Margin="8,0,0,0"/>
             </StackPanel>
+            <Button x:Name="UseJokerButton" Style="{StaticResource PrimaryButton}" Content="Utiliser le joker" Width="140" Height="40" Click="UseJokerButton_Click" Margin="6,12,6,0"/>
         </StackPanel>
 
         <!-- CENTER: Mot + clavier -->
@@ -167,13 +172,23 @@
             </ScrollViewer>
         </Grid>
 
-        <!-- RIGHT: Statut détaillé -->
+        <!-- RIGHT: Statut détaillé et options de difficulté -->
         <StackPanel Grid.Row="1" Grid.Column="2" Margin="8" VerticalAlignment="Top">
             <TextBlock Text="Statut" FontWeight="Bold" Foreground="#CCCCCC" Margin="4"/>
             <TextBox x:Name="ResultTextBox" Style="{StaticResource StatusTextBox}" Height="80" Text="Proposition : " TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True"/>
             <TextBlock Text="Conseils" FontWeight="Bold" Foreground="#CCCCCC" Margin="6,12,6,4"/>
             <TextBlock Text="• Appuyez sur une lettre ou tapez au clavier." Foreground="#BDBDBD" Margin="6,0"/>
             <TextBlock Text="• Appuyez sur Entrée pour valider votre proposition." Foreground="#BDBDBD" Margin="6,2"/>
+            <TextBlock Text="Difficultés" FontWeight="Bold" Foreground="#CCCCCC" Margin="6,12,6,4"/>
+            <TextBlock Text="• Facile : Mots plus court" Foreground="#BDBDBD" Margin="6,0"/>
+            <TextBlock Text="• Moyen : Mots de longueur moyenne" Foreground="#BDBDBD" Margin="6,2"/>
+            <TextBlock Text="• Difficile : Dictionnaire complet" Foreground="#BDBDBD" Margin="6,2"/>
+            <TextBlock Text="Joker" FontWeight="Bold" Foreground="#CCCCCC" Margin="6,12,6,4"/>
+            <TextBlock Text="• Utilisez votre joker pour révéler une lettre." Foreground="#BDBDBD" Margin="6,0"/>
+            <TextBlock Text="• Cela vous enlèvera une vie" Foreground="#BDBDBD" Margin="6,2"/>
+            <TextBlock Text="• Disponible une seule fois par partie" Foreground="#BDBDBD" Margin="6,2"/>
+            <Button x:Name="ChangeDifficultyButton" Style="{StaticResource PrimaryButton}" Content="Changer la difficulté" Width="180" Height="40" Click="ChangeDifficultyButton_Click" Margin="6,12,6,0"/>
+            <TextBox x:Name="DifficultyTextBox" Style="{StaticResource StatusTextBox}" Margin="6,8,6,0" Text="Difficulté :" IsReadOnly="True"/>
         </StackPanel>
 
         <!-- Status bar -->
