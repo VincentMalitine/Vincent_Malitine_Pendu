@@ -324,10 +324,10 @@ namespace Pendu_Vincent_Malitine
             LifeImage.Source = new ImageSourceConverter().ConvertFromString($@"Images\{vie}.png") as ImageSource;
             LifeTextBox.Text = "Vies restantes : " + vie;
             processlettresDevinees = "";
-            UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
             FoundedTextBox.Text = lettresDevinees;
+            tentative = ' ';
+            TextBox_Result = ' ';
             ResultTextBox.Text = "Proposition : ";
-            lettresUtilisees = "";
             Joker = 1;
 
             // Réactive et remet la couleur d'origine de toutes les lettres
@@ -339,7 +339,8 @@ namespace Pendu_Vincent_Malitine
                     b.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252526"));
                 }
             }
-
+            lettresUtilisees = "";
+            UsedTextBox.Text = "Lettre(s) précédement utilisée(s) : " + lettresUtilisees;
             ResetAttemptTimer();
         }
 
@@ -375,31 +376,31 @@ namespace Pendu_Vincent_Malitine
                 return false;
 
             // Sélectionne les lettres des positions encore masquées (#) et non des tirets
-            var candidates = mot
-                .Select((ch, idx) => new { ch, idx })
-                .Where(x => x.ch != '-' && lettresDevinees.Length > x.idx && lettresDevinees[x.idx] == '#')
-                .Select(x => x.ch)
+            var candidateLetters = mot
+                .Select((letter, index) => new { letter, index })
+                .Where(p => p.letter != '-' && lettresDevinees.Length > p.index && lettresDevinees[p.index] == '#')
+                .Select(p => p.letter)
                 .Distinct()
                 .ToArray();
 
-            if (candidates.Length == 0)
+            if (candidateLetters.Length == 0)
                 return false;
 
             // Choix aléatoire sécurisé
-            var chosen = candidates[RandomNumberGenerator.GetInt32(candidates.Length)];
+            var selectedLetter = candidateLetters[RandomNumberGenerator.GetInt32(candidateLetters.Length)];
 
             // Sécurité supplémentaire si jamais la lettre est déjà marquée utilisée (ne devrait pas arriver)
-            if (lettresUtilisees.Contains(chosen))
+            if (lettresUtilisees.Contains(selectedLetter))
             {
-                var alt = candidates.FirstOrDefault(c => !lettresUtilisees.Contains(c));
-                if (alt == default(char))
+                var alternativeLetter = candidateLetters.FirstOrDefault(letterCandidate => !lettresUtilisees.Contains(letterCandidate));
+                if (alternativeLetter == default)
                     return false;
-                chosen = alt;
+                selectedLetter = alternativeLetter;
             }
 
             // Place la lettre dans la "proposition" et réutilise le flux standard
-            TextBox_Result = chosen;
-            ResultTextBox.Text = "Proposition : " + chosen + " (Joker)";
+            TextBox_Result = selectedLetter;
+            ResultTextBox.Text = "Proposition : " + selectedLetter + " (Joker)";
             Button_Done_Click(this, new RoutedEventArgs());
             return true;
         }
