@@ -213,8 +213,8 @@ namespace Pendu_Vincent_Malitine
                     if (lettresDevinees == mot)
                     {
                         victory.Play();
-                        MessageBox.Show("Félicitations ! Vous avez deviné le mot : " + mot);
                         StopAttemptTimer();
+                        MessageBox.Show("Félicitations ! Vous avez deviné le mot : " + mot);
                         RestartButton_Click(this, new RoutedEventArgs());
                         return;
                     }
@@ -234,8 +234,8 @@ namespace Pendu_Vincent_Malitine
                     if (vie <= 0)
                     {
                         gameover.Play();
-                        MessageBox.Show("Game Over ! Le mot était : " + mot);
                         StopAttemptTimer();
+                        MessageBox.Show("Game Over ! Le mot était : " + mot);
                         RestartButton_Click(this, new RoutedEventArgs());
                         return;
                     }
@@ -432,8 +432,8 @@ namespace Pendu_Vincent_Malitine
             if (vie <= 0)
             {
                 gameover.Play();
-                MessageBox.Show("Game Over ! Le mot était : " + mot);
                 StopAttemptTimer();
+                MessageBox.Show("Game Over ! Le mot était : " + mot);
                 RestartButton_Click(this, new RoutedEventArgs());
                 return;
             }
