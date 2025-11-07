@@ -290,6 +290,13 @@ namespace Pendu_Vincent_Malitine
                     mot = words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
                 }
             }
+            else if (Difficulty == 0) // Easy
+            {
+                while (mot.Length > 6)
+                {
+                    mot = words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
+                }
+            }
             lettresDevinees = "";
             for (int i = 0; i < mot.Length; i++)
             {
