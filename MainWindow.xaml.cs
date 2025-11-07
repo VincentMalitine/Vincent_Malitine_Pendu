@@ -29,17 +29,17 @@ namespace Pendu_Vincent_Malitine
         SoundPlayer victory = new SoundPlayer(@"Sons\Victory.wav");
         SoundPlayer gameover = new SoundPlayer(@"Sons\GameOver.wav");
 
-        // Variables de jeu
-        string mot = " "; // Le mot à deviner
-        int vie = 10; // Nombre d'essais restants
-        string processlettresDevinees = ""; // Lettres déjà devinées durant le traitement
-        string lettresDevinees = ""; // Lettres déjà devinées
-        string TimerlettresUtilisees = ""; // Lettres devinées pour le timer
-        string lettresUtilisees = ""; // Lettres déjà devinées
-        char TextBox_Result = ' '; // Caractère entré dans la TextBox
-        char tentative = ' '; // Caractère proposé
-        int Difficulty = 0; // Niveau de difficulté
-        int Joker = 1; // Nombre de jokers disponibles
+        // Variables de jeu (champs - conservées)
+        string mot = " ";
+        int vie = 10;
+        string processlettresDevinees = "";
+        string lettresDevinees = "";
+        string TimerlettresUtilisees = "";
+        string lettresUtilisees = "";
+        char TextBox_Result = ' ';
+        char tentative = ' ';
+        int Difficulty = 0;
+        int Joker = 1;
 
         // Timer de tentative
         DispatcherTimer attemptTimer;
@@ -48,18 +48,14 @@ namespace Pendu_Vincent_Malitine
         public MainWindow()
         {
             InitializeComponent();
-            // Timer d’intervalle entre tentatives
             attemptTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
             attemptTimer.Tick += AttemptTimer_Tick;
 
-            // Utiliser PreviewTextInput pour les caractères (meilleure compatibilité clavier)
             this.PreviewTextInput += Window_PreviewTextInput;
-            // Utiliser PreviewKeyDown pour capter Enter avant qu'un contrôle le consomme
             this.PreviewKeyDown += Window_PreviewKeyDown;
             this.Focusable = true;
-            this.Focus(); // donne le focus à la fenêtre pour recevoir les frappes
+            this.Focus();
             MessageBox.Show("Bienvenue au jeu du Pendu ! Devinez le mot en proposant des lettres. Vous avez 10 vies. Bonne chance !");
-            // Initialise une nouvelle partie
             RestartButton_Click(this, new RoutedEventArgs());
         }
 
@@ -69,7 +65,6 @@ namespace Pendu_Vincent_Malitine
             TimeBar.Value = remainingSeconds;
             if (remainingSeconds <= 0)
             {
-                // Temps écoulé : -1 vie et reset
                 DecrementLife("Temps écoulé (-1 vie)");
                 if (vie > 0)
                 {
@@ -116,29 +111,28 @@ namespace Pendu_Vincent_Malitine
             }
         }
 
-        // Gère le clic sur les boutons de lettres pour capturer la lettre proposée
+        // Renommage : content -> texteBoutonLettre
         private void Button_Letter_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button btn && btn.Content is string content && content.Length == 1)
+            if (sender is Button btn && btn.Content is string texteBoutonLettre && texteBoutonLettre.Length == 1)
             {
-                TextBox_Result = content[0];
+                TextBox_Result = texteBoutonLettre[0];
                 ResultTextBox.Text = "Proposition : " + TextBox_Result.ToString();
             }
         }
 
-        // Gère la saisie de texte sur le clavier physique pour capturer les lettres entrées
+        // Renommage : c -> caractereSaisi
         private void Window_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {
             if (!string.IsNullOrEmpty(e.Text) && char.IsLetter(e.Text[0]))
             {
-                char c = char.ToUpperInvariant(e.Text[0]);
-                TextBox_Result = c;
-                ResultTextBox.Text = "Proposition : " + c;
-                e.Handled = true; // empêche une éventuelle propagation
+                char caractereSaisi = char.ToUpperInvariant(e.Text[0]);
+                TextBox_Result = caractereSaisi;
+                ResultTextBox.Text = "Proposition : " + caractereSaisi;
+                e.Handled = true;
             }
         }
 
-        // Gère la touche Enter pour valider la proposition au même titre qu'un clic sur le bouton "Done"
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter || e.Key == Key.Return)
@@ -148,62 +142,58 @@ namespace Pendu_Vincent_Malitine
             }
         }
 
-        // Gère le clic sur le bouton "Done" pour valider la proposition (plus ou moins le "coeur" du jeu)
+        // Renommages locaux :
+        // lettreConsommee -> lettreConsommeeDansTentative
+        // child -> uiChild, b -> boutonLettre, s -> texteBouton, c -> lettreEntree
         private void Button_Done_Click(object sender, RoutedEventArgs e)
         {
             tentative = TextBox_Result;
             TextBox_Result = ' ';
 
-            // lettre déjà utilisée
             if (lettresUtilisees.Contains(tentative))
             {
                 wrong.Play();
                 ResultTextBox.Text = "Proposition : ";
                 MessageBox.Show("Vous avez déjà utilisé la lettre : " + tentative);
-                ResetAttemptTimer();
                 return;
             }
-            // tentative vide
             else if (tentative == ' ')
             {
                 wrong.Play();
                 ResultTextBox.Text = "Proposition : ";
                 MessageBox.Show("Proposition ne peut être vide.");
-                // Ne reset pas le timer pour éviter spam reset sans jouer
                 return;
             }
             else
             {
-                bool lettreConsommee = false;
+                bool lettreConsommeeDansTentative = false;
 
                 if (mot.Contains(tentative))
                 {
                     lettresUtilisees += tentative;
-                    lettreConsommee = true;
+                    lettreConsommeeDansTentative = true;
                     processlettresDevinees = lettresDevinees;
                     lettresDevinees = "";
                     correct.Play();
 
-                    for (int i = 0; i < mot.Length; i++)
+                    for (int indexLettre = 0; indexLettre < mot.Length; indexLettre++)
                     {
-                        if (mot[i] == tentative)
+                        if (mot[indexLettre] == tentative)
                         {
                             lettresDevinees += tentative;
                         }
-                        else if (processlettresDevinees.Length > i)
+                        else if (processlettresDevinees.Length > indexLettre)
                         {
-                            lettresDevinees += processlettresDevinees[i];
+                            lettresDevinees += processlettresDevinees[indexLettre];
                         }
-                        // conserve les # pour les lettres non encore devinées
                         else
                         {
                             lettresDevinees += '#';
                         }
-                        // ajoute les tirets si le mot en contient
-                        if (mot[i] == '-')
+                        if (mot[indexLettre] == '-')
                         {
-                            lettresDevinees.Substring(i, 1);
-                            lettresDevinees = lettresDevinees.Remove(i, 1).Insert(i, "-");
+                            lettresDevinees.Substring(indexLettre, 1);
+                            lettresDevinees = lettresDevinees.Remove(indexLettre, 1).Insert(indexLettre, "-");
                         }
                     }
                     ResultTextBox.Text = "Proposition : ";
@@ -229,7 +219,7 @@ namespace Pendu_Vincent_Malitine
                     UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
                     FoundedTextBox.Text = lettresDevinees;
                     lettresUtilisees += tentative;
-                    lettreConsommee = true;
+                    lettreConsommeeDansTentative = true;
                     wrong.Play();
                     if (vie <= 0)
                     {
@@ -241,16 +231,15 @@ namespace Pendu_Vincent_Malitine
                     }
                 }
 
-                // Désactivation + couleur rouge si la lettre vient d'être consommée
-                if (lettreConsommee)
+                if (lettreConsommeeDansTentative)
                 {
-                    char c = char.ToUpperInvariant(tentative);
-                    foreach (var child in LettersPanel.Children)
+                    char lettreEntree = char.ToUpperInvariant(tentative);
+                    foreach (var uiChild in LettersPanel.Children)
                     {
-                        if (child is Button b && b.Content is string s && s.Length == 1 && s[0] == c)
+                        if (uiChild is Button boutonLettre && boutonLettre.Content is string texteBouton && texteBouton.Length == 1 && texteBouton[0] == lettreEntree)
                         {
-                            b.IsEnabled = false;
-                            b.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#7A0000"));
+                            boutonLettre.IsEnabled = false;
+                            boutonLettre.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#7A0000"));
                             break;
                         }
                     }
@@ -259,18 +248,16 @@ namespace Pendu_Vincent_Malitine
                 ResultTextBox.Text = "Proposition : ";
                 UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
                 FoundedTextBox.Text = lettresDevinees;
-                // Reset du timer après une tentative traitée
                 ResetAttemptTimer();
             }
         }
 
-        // Gère le clic sur le bouton "End" pour fermer l'application
         private void EndButton_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        // Gère le clic sur le bouton "Restart" pour initialiser une nouvelle partie
+        // Renommages : words -> tousLesMots, i -> indexLettre
         private void RestartButton_Click(object sender, RoutedEventArgs e)
         {
             if (Difficulty == 0)
@@ -285,38 +272,38 @@ namespace Pendu_Vincent_Malitine
             {
                 DifficultyTextBox.Text = "Difficulté : Extreme";
             }
-            var words = File.ReadAllLines(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WordsMAJONLY.txt"), Encoding.UTF8)
+            var tousLesMots = File.ReadAllLines(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WordsMAJONLY.txt"), Encoding.UTF8)
                             .Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
-            mot = words.Length == 0 ? "prototype" : words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
-            if (Difficulty == 1) // Hard
+            mot = tousLesMots.Length == 0 ? "prototype" : tousLesMots[RandomNumberGenerator.GetInt32(tousLesMots.Length)].Trim();
+            if (Difficulty == 1)
             {
                 while (mot.Length < 7 || mot.Length > 11)
                 {
-                    mot = words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
+                    mot = tousLesMots[RandomNumberGenerator.GetInt32(tousLesMots.Length)].Trim();
                 }
             }
-            if (Difficulty == 2) // Extreme
+            if (Difficulty == 2)
             {
                 while (mot.Length < 12)
                 {
-                    mot = words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
+                    mot = tousLesMots[RandomNumberGenerator.GetInt32(tousLesMots.Length)].Trim();
                 }
             }
-            else if (Difficulty == 0) // Easy
+            else if (Difficulty == 0)
             {
                 while (mot.Length > 6)
                 {
-                    mot = words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
+                    mot = tousLesMots[RandomNumberGenerator.GetInt32(tousLesMots.Length)].Trim();
                 }
             }
             lettresDevinees = "";
-            for (int i = 0; i < mot.Length; i++)
+            for (int indexLettre = 0; indexLettre < mot.Length; indexLettre++)
             {
                 lettresDevinees += "#";
-                if (mot[i] == '-')
+                if (mot[indexLettre] == '-')
                 {
-                    lettresDevinees.Substring(i, 1);
-                    lettresDevinees = lettresDevinees.Remove(i, 1).Insert(i, "-");
+                    lettresDevinees.Substring(indexLettre, 1);
+                    lettresDevinees = lettresDevinees.Remove(indexLettre, 1).Insert(indexLettre, "-");
                 }
             }
             vie = 10;
@@ -325,18 +312,15 @@ namespace Pendu_Vincent_Malitine
             LifeTextBox.Text = "Vies restantes : " + vie;
             processlettresDevinees = "";
             FoundedTextBox.Text = lettresDevinees;
-            tentative = ' ';
-            TextBox_Result = ' ';
             ResultTextBox.Text = "Proposition : ";
             Joker = 1;
 
-            // Réactive et remet la couleur d'origine de toutes les lettres
-            foreach (var child in LettersPanel.Children)
+            foreach (var uiChild in LettersPanel.Children)
             {
-                if (child is Button b && b.Content is string s && s.Length == 1 && char.IsLetter(s[0]))
+                if (uiChild is Button boutonLettre && boutonLettre.Content is string texteBouton && texteBouton.Length == 1 && char.IsLetter(texteBouton[0]))
                 {
-                    b.IsEnabled = true;
-                    b.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252526"));
+                    boutonLettre.IsEnabled = true;
+                    boutonLettre.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252526"));
                 }
             }
             lettresUtilisees = "";
@@ -350,6 +334,7 @@ namespace Pendu_Vincent_Malitine
             {
                 Difficulty = 1;
                 DifficultyTextBox.Text = "Difficulté : Hard";
+                StopAttemptTimer();
                 MessageBox.Show("Difficulté changée en Hard. Bonne chance !");
                 RestartButton_Click(this, new RoutedEventArgs());
             }
@@ -357,6 +342,7 @@ namespace Pendu_Vincent_Malitine
             {
                 Difficulty = 2;
                 DifficultyTextBox.Text = "Difficulté : Extreme";
+                StopAttemptTimer();
                 MessageBox.Show("Difficulté changée en Extreme. Sortez le dictionnaire !");
                 RestartButton_Click(this, new RoutedEventArgs());
             }
@@ -364,43 +350,40 @@ namespace Pendu_Vincent_Malitine
             {
                 Difficulty = 0;
                 DifficultyTextBox.Text = "Difficulté : Easy";
+                StopAttemptTimer();
                 MessageBox.Show("Difficulté changée en Easy. Amusez-vous bien !");
                 RestartButton_Click(this, new RoutedEventArgs());
             }
         }
 
-        // Propose une lettre aléatoire non encore révélée du mot, puis lance le traitement standard
+        // Renommages : candidateLetters -> lettresCandidates, selectedLetter -> lettreSelectionnee, alternativeLetter -> lettreAlternative
         private bool TryProposeRandomLetterFromWord()
         {
             if (string.IsNullOrWhiteSpace(mot) || string.IsNullOrEmpty(lettresDevinees))
                 return false;
 
-            // Sélectionne les lettres des positions encore masquées (#) et non des tirets
-            var candidateLetters = mot
+            var lettresCandidates = mot
                 .Select((letter, index) => new { letter, index })
                 .Where(p => p.letter != '-' && lettresDevinees.Length > p.index && lettresDevinees[p.index] == '#')
                 .Select(p => p.letter)
                 .Distinct()
                 .ToArray();
 
-            if (candidateLetters.Length == 0)
+            if (lettresCandidates.Length == 0)
                 return false;
 
-            // Choix aléatoire sécurisé
-            var selectedLetter = candidateLetters[RandomNumberGenerator.GetInt32(candidateLetters.Length)];
+            var lettreSelectionnee = lettresCandidates[RandomNumberGenerator.GetInt32(lettresCandidates.Length)];
 
-            // Sécurité supplémentaire si jamais la lettre est déjà marquée utilisée (ne devrait pas arriver)
-            if (lettresUtilisees.Contains(selectedLetter))
+            if (lettresUtilisees.Contains(lettreSelectionnee))
             {
-                var alternativeLetter = candidateLetters.FirstOrDefault(letterCandidate => !lettresUtilisees.Contains(letterCandidate));
-                if (alternativeLetter == default)
+                var lettreAlternative = lettresCandidates.FirstOrDefault(letterCandidate => !lettresUtilisees.Contains(letterCandidate));
+                if (lettreAlternative == default)
                     return false;
-                selectedLetter = alternativeLetter;
+                lettreSelectionnee = lettreAlternative;
             }
 
-            // Place la lettre dans la "proposition" et réutilise le flux standard
-            TextBox_Result = selectedLetter;
-            ResultTextBox.Text = "Proposition : " + selectedLetter + " (Joker)";
+            TextBox_Result = lettreSelectionnee;
+            ResultTextBox.Text = "Proposition : " + lettreSelectionnee + " (Joker)";
             Button_Done_Click(this, new RoutedEventArgs());
             return true;
         }
@@ -413,14 +396,12 @@ namespace Pendu_Vincent_Malitine
                 return;
             }
 
-            // Tente de proposer une lettre aléatoire du mot (non révélée)
             if (!TryProposeRandomLetterFromWord())
             {
                 MessageBox.Show("Aucune lettre à proposer. Toutes les lettres ont déjà été révélées ou ne sont pas valides.");
                 return;
             }
 
-            // Joker consommé uniquement si une lettre a bien été proposée
             Joker -= 1;
             vie--;
             LifeTextBox.Text = "Vies restantes : " + vie;
@@ -430,6 +411,9 @@ namespace Pendu_Vincent_Malitine
             UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
             FoundedTextBox.Text = lettresDevinees;
             lettresUtilisees += tentative;
+            tentative = ' ';
+            TextBox_Result = ' 
+                ';
             if (vie <= 0)
             {
                 gameover.Play();
