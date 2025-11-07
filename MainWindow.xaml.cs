@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
+using System.Windows.Threading; // Ajout pour DispatcherTimer
 
 namespace Pendu_Vincent_Malitine
 {
@@ -38,11 +38,20 @@ namespace Pendu_Vincent_Malitine
         string lettresUtilisees = ""; // Lettres déjà devinées
         char TextBox_Result = ' '; // Caractère entré dans la TextBox
         char tentative = ' '; // Caractère proposé
+        int Difficulty = 0; // Niveau de difficulté
+        int Joker = 1; // Nombre de jokers disponibles
 
+        // Timer de tentative
+        DispatcherTimer attemptTimer;
+        int remainingSeconds = 30;
 
         public MainWindow()
         {
             InitializeComponent();
+            // Timer d’intervalle entre tentatives
+            attemptTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+            attemptTimer.Tick += AttemptTimer_Tick;
+
             // Utiliser PreviewTextInput pour les caractères (meilleure compatibilité clavier)
             this.PreviewTextInput += Window_PreviewTextInput;
             // Utiliser PreviewKeyDown pour capter Enter avant qu'un contrôle le consomme
@@ -50,11 +59,62 @@ namespace Pendu_Vincent_Malitine
             this.Focusable = true;
             this.Focus(); // donne le focus à la fenêtre pour recevoir les frappes
             MessageBox.Show("Bienvenue au jeu du Pendu ! Devinez le mot en proposant des lettres. Vous avez 10 vies. Bonne chance !");
-            // Initialise une nouvelle partie au démarrage en utilisant le bouton de redémarrage afin d'éviter la duplication de code
+            // Initialise une nouvelle partie
             RestartButton_Click(this, new RoutedEventArgs());
-
         }
 
+        private void AttemptTimer_Tick(object? sender, EventArgs e)
+        {
+            remainingSeconds--;
+            TimeBar.Value = remainingSeconds;
+            if (remainingSeconds <= 0)
+            {
+                // Temps écoulé : -1 vie et reset
+                DecrementLife("Temps écoulé (-1 vie)");
+                if (vie > 0)
+                {
+                    ResetAttemptTimer();
+                }
+            }
+        }
+
+        private void ResetAttemptTimer()
+        {
+            remainingSeconds = 30;
+            TimeBar.Maximum = 30;
+            TimeBar.Value = remainingSeconds;
+            if (!attemptTimer.IsEnabled)
+                attemptTimer.Start();
+        }
+
+        private void StopAttemptTimer()
+        {
+            attemptTimer.Stop();
+        }
+
+        private void DecrementLife(string reason)
+        {
+            vie--;
+            LifeTextBox.Text = "Vies restantes : " + vie;
+            LifeProgressBar.Value = vie * 10;
+            LifeImage.Source = new ImageSourceConverter().ConvertFromString($@"Images\{vie}.png") as ImageSource;
+            wrong.Play();
+            ResultTextBox.Text = "Proposition : ";
+            UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
+            FoundedTextBox.Text = lettresDevinees;
+
+            if (vie <= 0)
+            {
+                gameover.Play();
+                MessageBox.Show(reason + "\nGame Over ! Le mot était : " + mot);
+                StopAttemptTimer();
+                RestartButton_Click(this, new RoutedEventArgs());
+            }
+            else if (reason.StartsWith("Temps"))
+            {
+                MessageBox.Show(reason);
+            }
+        }
 
         // Gère le clic sur les boutons de lettres pour capturer la lettre proposée
         private void Button_Letter_Click(object sender, RoutedEventArgs e)
@@ -93,43 +153,43 @@ namespace Pendu_Vincent_Malitine
         {
             tentative = TextBox_Result;
             TextBox_Result = ' ';
-            // vérifie si la lettre a déjà été utilisée
+
+            // lettre déjà utilisée
             if (lettresUtilisees.Contains(tentative))
             {
-                // son d'erreur
                 wrong.Play();
                 ResultTextBox.Text = "Proposition : ";
                 MessageBox.Show("Vous avez déjà utilisé la lettre : " + tentative);
+                ResetAttemptTimer();
+                return;
             }
-            // vérifie si la tentative est vide
+            // tentative vide
             else if (tentative == ' ')
             {
-                // son d'erreur
                 wrong.Play();
                 ResultTextBox.Text = "Proposition : ";
                 MessageBox.Show("Proposition ne peut être vide.");
+                // Ne reset pas le timer pour éviter spam reset sans jouer
+                return;
             }
-            // traite la tentative
             else
             {
-                // vérifie si la lettre proposée est dans le mot
+                bool lettreConsommee = false;
+
                 if (mot.Contains(tentative))
                 {
                     lettresUtilisees += tentative;
+                    lettreConsommee = true;
                     processlettresDevinees = lettresDevinees;
                     lettresDevinees = "";
-                    // son de réussite
                     correct.Play();
 
-                    // met à jour les lettres devinées
                     for (int i = 0; i < mot.Length; i++)
                     {
-                        // remplace les # par la lettre proposée si elle est correcte
                         if (mot[i] == tentative)
                         {
                             lettresDevinees += tentative;
                         }
-                        // conserve les lettres déjà devinées
                         else if (processlettresDevinees.Length > i)
                         {
                             lettresDevinees += processlettresDevinees[i];
@@ -149,16 +209,16 @@ namespace Pendu_Vincent_Malitine
                     ResultTextBox.Text = "Proposition : ";
                     UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
                     FoundedTextBox.Text = lettresDevinees;
-                    // vérifie si le mot est entièrement deviné
+
                     if (lettresDevinees == mot)
                     {
-                        // son de victoire
                         victory.Play();
                         MessageBox.Show("Félicitations ! Vous avez deviné le mot : " + mot);
+                        StopAttemptTimer();
                         RestartButton_Click(this, new RoutedEventArgs());
+                        return;
                     }
                 }
-                // lettre incorrecte
                 else
                 {
                     vie--;
@@ -169,24 +229,39 @@ namespace Pendu_Vincent_Malitine
                     UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
                     FoundedTextBox.Text = lettresDevinees;
                     lettresUtilisees += tentative;
-                    // son d'erreur
+                    lettreConsommee = true;
                     wrong.Play();
-                    // vérifie si le joueur a épuisé toutes ses vies
                     if (vie <= 0)
                     {
-                        // son de défaite
                         gameover.Play();
                         MessageBox.Show("Game Over ! Le mot était : " + mot);
+                        StopAttemptTimer();
                         RestartButton_Click(this, new RoutedEventArgs());
+                        return;
                     }
                 }
-                // réinitialise la proposition et met à jour l'affichage "au cas où cela n'as ultérieurement pas été effectué"
+
+                // Désactivation + couleur rouge si la lettre vient d'être consommée
+                if (lettreConsommee)
+                {
+                    char c = char.ToUpperInvariant(tentative);
+                    foreach (var child in LettersPanel.Children)
+                    {
+                        if (child is Button b && b.Content is string s && s.Length == 1 && s[0] == c)
+                        {
+                            b.IsEnabled = false;
+                            b.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#7A0000"));
+                            break;
+                        }
+                    }
+                }
+
                 ResultTextBox.Text = "Proposition : ";
                 UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
                 FoundedTextBox.Text = lettresDevinees;
-                
+                // Reset du timer après une tentative traitée
+                ResetAttemptTimer();
             }
-
         }
 
         // Gère le clic sur le bouton "End" pour fermer l'application
@@ -198,10 +273,23 @@ namespace Pendu_Vincent_Malitine
         // Gère le clic sur le bouton "Restart" pour initialiser une nouvelle partie
         private void RestartButton_Click(object sender, RoutedEventArgs e)
         {
-            // charge un mot aléatoire depuis le fichier WordsMAJONLY.txt
-            var words = File.ReadAllLines(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WordsMAJONLY.txt"), Encoding.UTF8).Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
+            var words = File.ReadAllLines(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WordsMAJONLY.txt"), Encoding.UTF8)
+                            .Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
             mot = words.Length == 0 ? "prototype" : words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
-            // initialise les variables de jeu
+            if (Difficulty == 1) // Hard
+            {
+                while (mot.Length < 7)
+                {
+                    mot = words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
+                }
+            }
+            if (Difficulty == 2) // Extreme
+            {
+                while (mot.Length < 10)
+                {
+                    mot = words[RandomNumberGenerator.GetInt32(words.Length)].Trim();
+                }
+            }
             lettresDevinees = "";
             for (int i = 0; i < mot.Length; i++)
             {
@@ -221,6 +309,115 @@ namespace Pendu_Vincent_Malitine
             FoundedTextBox.Text = lettresDevinees;
             ResultTextBox.Text = "Proposition : ";
             lettresUtilisees = "";
+            Joker = 1;
+
+            // Réactive et remet la couleur d'origine de toutes les lettres
+            foreach (var child in LettersPanel.Children)
+            {
+                if (child is Button b && b.Content is string s && s.Length == 1 && char.IsLetter(s[0]))
+                {
+                    b.IsEnabled = true;
+                    b.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#252526"));
+                }
+            }
+
+            ResetAttemptTimer();
+        }
+
+        private void ChangeDifficultyButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Difficulty == 0)
+            {
+                Difficulty = 1;
+                DifficultyTextBox.Text = "Difficulté : Hard";
+                MessageBox.Show("Difficulté changée en Hard. Bonne chance !");
+                RestartButton_Click(this, new RoutedEventArgs());
+            }
+            else if (Difficulty == 1)
+            {
+                Difficulty = 2;
+                DifficultyTextBox.Text = "Difficulté : Extreme";
+                MessageBox.Show("Difficulté changée en Extreme. Sortez le dictionnaire !");
+                RestartButton_Click(this, new RoutedEventArgs());
+            }
+            else
+            {
+                Difficulty = 0;
+                DifficultyTextBox.Text = "Difficulté : Easy";
+                MessageBox.Show("Difficulté changée en Easy. Amusez-vous bien !");
+                RestartButton_Click(this, new RoutedEventArgs());
+            }
+        }
+
+        // Propose une lettre aléatoire non encore révélée du mot, puis lance le traitement standard
+        private bool TryProposeRandomLetterFromWord()
+        {
+            if (string.IsNullOrWhiteSpace(mot) || string.IsNullOrEmpty(lettresDevinees))
+                return false;
+
+            // Sélectionne les lettres des positions encore masquées (#) et non des tirets
+            var candidates = mot
+                .Select((ch, idx) => new { ch, idx })
+                .Where(x => x.ch != '-' && lettresDevinees.Length > x.idx && lettresDevinees[x.idx] == '#')
+                .Select(x => x.ch)
+                .Distinct()
+                .ToArray();
+
+            if (candidates.Length == 0)
+                return false;
+
+            // Choix aléatoire sécurisé
+            var chosen = candidates[RandomNumberGenerator.GetInt32(candidates.Length)];
+
+            // Sécurité supplémentaire si jamais la lettre est déjà marquée utilisée (ne devrait pas arriver)
+            if (lettresUtilisees.Contains(chosen))
+            {
+                var alt = candidates.FirstOrDefault(c => !lettresUtilisees.Contains(c));
+                if (alt == default(char))
+                    return false;
+                chosen = alt;
+            }
+
+            // Place la lettre dans la "proposition" et réutilise le flux standard
+            TextBox_Result = chosen;
+            ResultTextBox.Text = "Proposition : " + chosen + " (Joker)";
+            Button_Done_Click(this, new RoutedEventArgs());
+            return true;
+        }
+
+        private void UseJokerButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Joker <= 0)
+            {
+                MessageBox.Show("Vous n'avez plus de jokers disponibles.");
+                return;
+            }
+
+            // Tente de proposer une lettre aléatoire du mot (non révélée)
+            if (!TryProposeRandomLetterFromWord())
+            {
+                MessageBox.Show("Aucune lettre à proposer. Toutes les lettres ont déjà été révélées ou ne sont pas valides.");
+                return;
+            }
+
+            // Joker consommé uniquement si une lettre a bien été proposée
+            Joker -= 1;
+            vie--;
+            LifeTextBox.Text = "Vies restantes : " + vie;
+            LifeProgressBar.Value = vie * 10;
+            LifeImage.Source = new ImageSourceConverter().ConvertFromString($@"Images\{vie}.png") as ImageSource;
+            ResultTextBox.Text = "Proposition : ";
+            UsedTextBox.Text = "Lettre(s) précédement utilisé(s) : " + lettresUtilisees;
+            FoundedTextBox.Text = lettresDevinees;
+            lettresUtilisees += tentative;
+            if (vie <= 0)
+            {
+                gameover.Play();
+                MessageBox.Show("Game Over ! Le mot était : " + mot);
+                StopAttemptTimer();
+                RestartButton_Click(this, new RoutedEventArgs());
+                return;
+            }
         }
     }
 }
