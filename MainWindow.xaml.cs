@@ -262,15 +262,15 @@ namespace Pendu_Vincent_Malitine
         {
             if (Difficulty == 0)
             {
-                DifficultyTextBox.Text = "Difficulté : Easy";
+                DifficultyTextBox.Text = "Difficulté : Facile";
             }
             else if (Difficulty == 1)
             {
-                DifficultyTextBox.Text = "Difficulté : Hard";
+                DifficultyTextBox.Text = "Difficulté : Moyen";
             }
             else
             {
-                DifficultyTextBox.Text = "Difficulté : Extreme";
+                DifficultyTextBox.Text = "Difficulté : Difficile";
             }
             var tousLesMots = File.ReadAllLines(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WordsMAJONLY.txt"), Encoding.UTF8)
                             .Where(l => !string.IsNullOrWhiteSpace(l)).ToArray();
