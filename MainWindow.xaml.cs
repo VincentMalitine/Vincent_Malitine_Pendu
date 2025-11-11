@@ -335,25 +335,25 @@ namespace Pendu_Vincent_Malitine
             if (Difficulty == 0)
             {
                 Difficulty = 1;
-                DifficultyTextBox.Text = "Difficulté : Hard";
+                DifficultyTextBox.Text = "Difficulté : Moyen";
                 StopAttemptTimer();
-                MessageBox.Show("Difficulté changée en Hard. Bonne chance !");
+                MessageBox.Show("Difficulté changée en Moyen. Bonne chance !");
                 RestartButton_Click(this, new RoutedEventArgs());
             }
             else if (Difficulty == 1)
             {
                 Difficulty = 2;
-                DifficultyTextBox.Text = "Difficulté : Extreme";
+                DifficultyTextBox.Text = "Difficulté : Difficile";
                 StopAttemptTimer();
-                MessageBox.Show("Difficulté changée en Extreme. Sortez le dictionnaire !");
+                MessageBox.Show("Difficulté changée en Difficile. Sortez le dictionnaire !");
                 RestartButton_Click(this, new RoutedEventArgs());
             }
             else
             {
                 Difficulty = 0;
-                DifficultyTextBox.Text = "Difficulté : Easy";
+                DifficultyTextBox.Text = "Difficulté : Facile";
                 StopAttemptTimer();
-                MessageBox.Show("Difficulté changée en Easy. Amusez-vous bien !");
+                MessageBox.Show("Difficulté changée en Facile. Amusez-vous bien !");
                 RestartButton_Click(this, new RoutedEventArgs());
             }
         }
