@@ -324,6 +324,8 @@ namespace Pendu_Vincent_Malitine
                 }
             }
             lettresUtilisees = "";
+            tentative = ' ';
+            TextBox_Result = ' ';
             UsedTextBox.Text = "Lettre(s) précédement utilisée(s) : " + lettresUtilisees;
             ResetAttemptTimer();
         }
